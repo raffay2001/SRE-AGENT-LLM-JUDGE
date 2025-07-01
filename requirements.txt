@@ -1,0 +1,6 @@
+requests
+pandas
+ollama
+langchain
+langchain-ollama
+tqdm
