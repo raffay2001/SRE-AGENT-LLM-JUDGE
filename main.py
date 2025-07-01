@@ -35,8 +35,6 @@ class LLMCustomEndpoint(LLM):
     ) -> str:
         """Call the API endpoint with the given prompt."""
         try:
-            # print(f"The prompt is: ")
-            # print(prompt)
             payload = {
                 "messages": [{"role": "user", "content": prompt}],
                 "stream": False,
@@ -109,26 +107,13 @@ def  send_to_llm(insight, prompt_type="remediation_steps") -> Dict[str, Any]:
                 ),
                 ("human", RemediationStepsGEvalPrompt if prompt_type == "remediation_steps" else InvestigationSummaryEvalPrompt),
             ]
-        )
-        
-        # print(f"\nThe insight is: \n{insight}")
-        # print(f"\nThe format_instructions are: \n{format_instructions}")
-        
+        )        
         chain = prompt | llm
         output = chain.invoke({
            "insight":insight,
            "format_instructions": format_instructions
         })
-        
-        # llm_response = output
-        # print(f"The type of LLM response is: \n{type(llm_response)}")
-        # print(f"The LLM response is: \n{llm_response}")
-       
         parsed_llm_response = output_parser.parse(output)
-        # print(f"The type of the parsed LLM response is: \n{type(parsed_llm_response)}")
-        # print(f"The Parsed LLM response is: \n{parsed_llm_response}")
-        
-        # return parsed_llm_response.get("classification"), parsed_llm_response.get("justification")
         return parsed_llm_response
     except Exception as e:
         print(f"Error during LLM call: {e}")
